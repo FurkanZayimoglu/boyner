@@ -30,6 +30,9 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+    buildFeatures{
+        viewBinding = true
+    }
 }
 
 dependencies {
@@ -46,8 +49,8 @@ dependencies {
     implementation ("androidx.room:room-runtime:2.5.2")
     annotationProcessor ("androidx.room:room-compiler:2.5.2")
     implementation ("androidx.room:room-ktx:2.5.2")
-    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1")
-    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1")
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
     implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
     implementation ("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
@@ -58,4 +61,7 @@ dependencies {
     implementation ("com.github.bumptech.glide:glide:4.12.0")
     annotationProcessor ("com.github.bumptech.glide:compiler:4.12.0")
     implementation ("androidx.paging:paging-runtime-ktx:3.1.1")
+    implementation ("me.relex:circleindicator:2.1.6")
+    implementation ("androidx.viewpager2:viewpager2:1.0.0")
+
 }

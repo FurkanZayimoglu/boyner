@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/news_nav_graph"
+    app:startDestination="@id/sourceNewsFragment">
+
+    <fragment
+        android:id="@id/sourceNewsFragment"
+        android:name="com.example.boyner.ui.fragment.SourceNewsFragment"
+        android:label="BreakingNewsFragment" >
+        <action
+            android:id="@+id/action_breakingNewsFragment_to_topHeadlinesSourceFragment"
+            app:destination="@id/topHeadlinesSourceFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/topHeadlinesSourceFragment"
+        android:name="com.example.boyner.ui.fragment.TopHeadlinesSourceFragment"
+        android:label="TopHeadlinesSource" >
+    </fragment>
+</navigation>

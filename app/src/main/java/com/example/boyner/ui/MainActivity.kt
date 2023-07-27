@@ -1,8 +1,9 @@
-package com.example.boyner
+package com.example.boyner.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
+import com.example.boyner.R
 import com.example.boyner.viewmodel.NewsViewModel
 
 class MainActivity : AppCompatActivity() {
@@ -18,7 +19,6 @@ class MainActivity : AppCompatActivity() {
         val navController= navHostFragment.navController
         bottomNavigationView.setupWithNavController(navController)
  */
-
 
 
 
