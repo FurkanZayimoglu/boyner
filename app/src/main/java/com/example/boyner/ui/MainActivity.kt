@@ -3,24 +3,24 @@ package com.example.boyner.ui
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import com.example.boyner.R
+import com.example.boyner.databinding.ActivityMainBinding
 import com.example.boyner.viewmodel.NewsViewModel
 
 class MainActivity : AppCompatActivity() {
 
-    private val viewModel by viewModels<NewsViewModel>()
+    private lateinit var binding: ActivityMainBinding
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        /*
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
         val navHostFragment= supportFragmentManager.findFragmentById(R.id.newsNavHostFrag) as NavHostFragment
-        val navController= navHostFragment.navController
-        bottomNavigationView.setupWithNavController(navController)
- */
-
-
-
+        val navController= navHostFragment.findNavController()
+        navController.navigate(R.id.sourceNewsFragment)
     }
 }

@@ -9,33 +9,30 @@
     android:padding="8dp"
     tools:context=".ui.fragment.SourceNewsFragment">
 
-    <ScrollView
-        android:id="@+id/svCategories"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvCategories"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        tools:listitem="@layout/item_category_layout"
+        tools:itemCount="3"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <LinearLayout
-            android:id="@+id/containerLayout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="16dp">
-        </LinearLayout>
-    </ScrollView>
+        app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvSourceNews"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:clipToPadding="false"
+        android:layout_marginTop="16dp"
+        tools:listitem="@layout/item_source_news_layout"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:paddingBottom="50dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/svCategories" />
+        app:layout_constraintTop_toBottomOf="@id/rvCategories"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ProgressBar
         android:id="@+id/pbLoading"

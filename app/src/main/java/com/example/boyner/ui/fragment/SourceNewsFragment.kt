@@ -1,60 +1,82 @@
 package com.example.boyner.ui.fragment
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.boyner.R
+import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView.LayoutManager
+import com.example.boyner.adapter.CategoryAdapter
+import com.example.boyner.adapter.SourcesAdapter
+import com.example.boyner.databinding.FragmentSourceNewsBinding
+import com.example.boyner.model.SourcesModel.SourcesSubListData
+import com.example.boyner.network.repository.Repository
+import com.example.boyner.viewmodel.NewsViewModel
+import com.example.boyner.viewmodel.ViewModelFactory
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [SourceNewsFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class SourceNewsFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+    private lateinit var binding: FragmentSourceNewsBinding
+    private lateinit var sourceAdapter: SourcesAdapter
+    private lateinit var categoryAdapter: CategoryAdapter
+    private val filteredList = mutableListOf<SourcesSubListData>()
+    private var sourceList = mutableListOf<SourcesSubListData>()
+
+    private val repository = Repository()
+    private val viewModel: NewsViewModel by viewModels {
+        ViewModelFactory(repository)
+
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_source_news, container, false)
+    ): View {
+        binding = FragmentSourceNewsBinding.inflate(inflater, container, false)
+
+        categoryAdapter = CategoryAdapter()
+        binding.rvCategories.adapter = categoryAdapter
+        categoryAdapter.onClickListener = { categoriyList ->
+            filterCategory(categoriyList)
+        }
+        binding.rvCategories.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        sourceAdapter = SourcesAdapter()
+        binding.rvSourceNews.adapter = sourceAdapter
+
+        observeData()
+
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment SourceNewsFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            SourceNewsFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    private fun observeData() {
+        viewModel.sourcesList.observe(viewLifecycleOwner) { sourcesSubListData ->
+            sourceList = sourcesSubListData
+            sourceAdapter.setData(sourceList)
+            categoryAdapter.setData(sourceList.map { it.category }.distinct())
+        }
+
+    }
+
+    private fun filterCategory(filterCategoryList: MutableList<String>) {
+        filteredList.clear()
+        for (filterText in filterCategoryList) {
+            for (source in sourceList) {
+                if (source.category.contains(filterText, ignoreCase = true)) {
+                    filteredList.add(source)
                 }
             }
+        }
+        sourceAdapter.apply {
+            if (filteredList.isEmpty()) {
+                setData(sourceList)
+                return
+            }
+            setData(filteredList)
+        }
     }
 }

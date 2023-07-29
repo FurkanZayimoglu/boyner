@@ -16,8 +16,8 @@ class NewsViewModel(
     private val repository: Repository
 ) : ViewModel() {
 
-    private val _sourcesList = MutableLiveData<List<SourcesSubListData>>()
-    val sourcesList: LiveData<List<SourcesSubListData>> get() = _sourcesList
+    private val _sourcesList = MutableLiveData<MutableList<SourcesSubListData>>()
+    val sourcesList: LiveData<MutableList<SourcesSubListData>> get() = _sourcesList
 
     private val _topHeadlinesArticleList = MutableLiveData<List<ArticleData>>()
     val topHeadlinesArticleList: LiveData<List<ArticleData>> get() = _topHeadlinesArticleList
@@ -35,7 +35,7 @@ class NewsViewModel(
         _loading.value = true
         if (response.isSuccessful) {
             _loading.value = false
-            _sourcesList.value = response.body()?.sources
+            _sourcesList.value = response.body()?.sources?.toMutableList()
         } else {
             _loading.value = false
             Resource.Error<SourcesData>("Error")
