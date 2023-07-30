@@ -18,7 +18,7 @@ interface BoynerNewsApi {
 
     @GET("v2/top-headlines")
     suspend fun getTopHeadlines(
-        @Query("language") language: String = "en",
+        @Query("sources") sources: String,
         @Query("apiKey") apiKey: String = API_KEY
     ): Response<TopHeadlinesData>      // source un idsi eklencek buraya 
 }

@@ -7,9 +7,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.boyner.databinding.ItemSourceNewsLayoutBinding
 import com.example.boyner.model.SourcesModel.SourcesSubListData
 
-class SourcesAdapter() : RecyclerView.Adapter<SourcesAdapter.SourceViewHolder>() {
+class SourcesAdapter : RecyclerView.Adapter<SourcesAdapter.SourceViewHolder>() {
 
     private var sourceList: List<SourcesSubListData> = emptyList()
+    var onClickListener:((String,String) -> Unit)? = null
 
     @SuppressLint("NotifyDataSetChanged")
     fun setData(data: List<SourcesSubListData>) {
@@ -36,6 +37,9 @@ class SourcesAdapter() : RecyclerView.Adapter<SourcesAdapter.SourceViewHolder>()
             with(binding) {
                 tvNewsTitle.text = sourceListData.name
                 tvNewsDescription.text = sourceListData.description
+                root.setOnClickListener {
+                    onClickListener?.invoke(sourceListData.id, sourceListData.name)
+                }
             }
         }
     }

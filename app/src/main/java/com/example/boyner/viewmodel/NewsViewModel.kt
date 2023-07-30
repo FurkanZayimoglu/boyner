@@ -4,11 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.boyner.model.SourcesModel.SourcesData
 import com.example.boyner.model.SourcesModel.SourcesSubListData
 import com.example.boyner.model.TopHeadlinesModel.ArticleData
-import com.example.boyner.model.TopHeadlinesModel.TopHeadlinesData
-import com.example.boyner.network.Resource
 import com.example.boyner.network.repository.Repository
 import kotlinx.coroutines.launch
 
@@ -25,32 +22,35 @@ class NewsViewModel(
     private val _loading = MutableLiveData<Boolean>()
     val loading: LiveData<Boolean> get() = _loading
 
+    private val _errorMessage = MutableLiveData<String>()
+     val errorMessage: LiveData<String> get() = _errorMessage
 
     init {
         getSourceList()
     }
 
-    private fun getSourceList() = viewModelScope.launch {
-        val response = repository.getSource()
+     fun getSourceList() = viewModelScope.launch {
         _loading.value = true
+        val response = repository.getSource()
         if (response.isSuccessful) {
             _loading.value = false
             _sourcesList.value = response.body()?.sources?.toMutableList()
         } else {
             _loading.value = false
-            Resource.Error<SourcesData>("Error")
+            _errorMessage.value = "veriler alınamadı"
+
         }
     }
 
-    fun getTopHeadLines() = viewModelScope.launch {
-        val response = repository.getTopHeadLines()
+    fun getTopHeadLines(source: String) = viewModelScope.launch {
+        val response = repository.getTopHeadLines(source)
         _loading.value = true
         if (response.isSuccessful) {
             _loading.value = false
             _topHeadlinesArticleList.value = response.body()?.articles
         } else {
             _loading.value = false
-            Resource.Error<TopHeadlinesData>("Error")
+            _errorMessage.value = "veriler alınamadı"
         }
     }
 

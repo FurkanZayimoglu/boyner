@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("androidx.navigation.safeargs")
 }
 
 android {
@@ -65,6 +66,12 @@ dependencies {
     implementation ("me.relex:circleindicator:2.1.6")
     implementation ("androidx.viewpager2:viewpager2:1.0.0")
     implementation ("com.google.android.gms:play-services-ads:22.2.0")
+    implementation("androidx.navigation:navigation-dynamic-features-fragment:2.6.0")
+    androidTestImplementation("androidx.navigation:navigation-testing:2.6.0")
+    implementation ("ru.tinkoff.scrollingpagerindicator:scrollingpagerindicator:1.0.6")
+    implementation("androidx.recyclerview:recyclerview:1.3.1")
+    implementation("androidx.recyclerview:recyclerview-selection:1.1.0")
+
 
 
 

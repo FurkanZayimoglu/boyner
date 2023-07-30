@@ -1,60 +1,105 @@
 package com.example.boyner.ui.fragment
 
+import android.app.AlertDialog
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.boyner.R
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.PagerSnapHelper
+import com.example.boyner.adapter.TopHeadLinesAdapter
+import com.example.boyner.databinding.FragmentTopHeadlinesSourceBinding
+import com.example.boyner.network.repository.Repository
+import com.example.boyner.ui.MainActivity
+import com.example.boyner.viewmodel.NewsViewModel
+import com.example.boyner.viewmodel.ViewModelFactory
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [TopHeadlinesSourceFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class TopHeadlinesSourceFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+    private val repository = Repository()
+    private val viewModel: NewsViewModel by viewModels {
+        ViewModelFactory(repository)
     }
+    private var binding: FragmentTopHeadlinesSourceBinding? = null
+    private val args: TopHeadlinesSourceFragmentArgs by navArgs()
+    private lateinit var topHeadLinesAdapter: TopHeadLinesAdapter
+    private lateinit var topHeadLinesAdapterToHorizontal: TopHeadLinesAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_top_headlines_source, container, false)
+    ): View {
+        binding = FragmentTopHeadlinesSourceBinding.inflate(inflater, container, false)
+        (activity as MainActivity).changeToolbarTitle(args.name)
+        (activity as MainActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        setRecyclerSetting()
+        observeLoading()
+        observeData()
+        observeError()
+        return binding!!.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment TopHeadlinesSourceFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            TopHeadlinesSourceFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    private fun observeLoading() {
+        viewModel.loading.observe(viewLifecycleOwner) { loading ->
+            if (loading) {
+                binding?.apply {
+                    pbLoading.visibility = View.VISIBLE
+                    topHeadlinesSourceFragment.visibility = View.GONE
+                    indicator.visibility = View.GONE
+                }
+            } else {
+                binding?.apply {
+                    pbLoading.visibility = View.GONE
+                    topHeadlinesSourceFragment.visibility = View.VISIBLE
                 }
             }
+        }
+    }
+
+    private fun observeData() {
+        viewModel.getTopHeadLines(args.id)
+        viewModel.topHeadlinesArticleList.observe(viewLifecycleOwner) {
+            topHeadLinesAdapterToHorizontal.setData(it.subList(0, 3))
+            topHeadLinesAdapter.setData(it.subList(3, it.size))
+            binding?.indicator?.visibility = View.VISIBLE
+        }
+    }
+
+    private fun observeError(){
+        viewModel.errorMessage.observe(viewLifecycleOwner){ errorMessage ->
+            AlertDialog.Builder(context)
+                .setTitle("Uyarı")
+                .setMessage(errorMessage)
+                .setPositiveButton("Tekrar Dene ") { _, _ ->
+                    viewModel.getTopHeadLines(args.id)
+                }
+                .setNegativeButton("Vazgeç") { dialog, _ ->
+                    dialog.dismiss()
+                }.create().show()
+        }
+    }
+
+    private fun setRecyclerSetting() {
+        topHeadLinesAdapter = TopHeadLinesAdapter()
+        topHeadLinesAdapterToHorizontal = TopHeadLinesAdapter()
+        binding!!.apply {
+            rvSourceNews.adapter = topHeadLinesAdapter
+            rvHorizontal.adapter = topHeadLinesAdapterToHorizontal
+            rvHorizontal.layoutManager =
+                LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            val pagerSnapHelper = PagerSnapHelper()
+            pagerSnapHelper.attachToRecyclerView(rvHorizontal)
+            indicator.attachToRecyclerView(rvHorizontal, pagerSnapHelper)
+            indicator.createIndicators(3, 0)
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding = null
+        (activity as MainActivity).getActivityTitle()
+
     }
 }
