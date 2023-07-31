@@ -6,18 +6,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.boyner.R
 import com.example.boyner.adapter.CategoryAdapter
 import com.example.boyner.adapter.SourcesAdapter
 import com.example.boyner.databinding.FragmentSourceNewsBinding
-import com.example.boyner.model.SourcesModel.SourcesSubListData
-import com.example.boyner.network.repository.Repository
+import com.example.boyner.model.ourcesModel.SourcesSubListData
 import com.example.boyner.ui.MainActivity
 import com.example.boyner.viewmodel.NewsViewModel
-import com.example.boyner.viewmodel.ViewModelFactory
 
 
 class SourceNewsFragment : Fragment() {
@@ -26,10 +23,7 @@ class SourceNewsFragment : Fragment() {
     private lateinit var categoryAdapter: CategoryAdapter
     private val filteredList = mutableListOf<SourcesSubListData>()
     private var sourceList = mutableListOf<SourcesSubListData>()
-    private val repository = Repository()
-    private val viewModel: NewsViewModel by viewModels {
-        ViewModelFactory(repository)
-    }
+    private lateinit var viewModel: NewsViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,6 +31,7 @@ class SourceNewsFragment : Fragment() {
     ): View {
         binding = FragmentSourceNewsBinding.inflate(inflater, container, false)
         (activity as MainActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        viewModel =  (activity as MainActivity).viewModel
         settingRecycler()
         observeLoading()
         observeData()

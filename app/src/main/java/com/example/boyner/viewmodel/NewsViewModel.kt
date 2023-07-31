@@ -4,8 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.boyner.model.SourcesModel.SourcesSubListData
-import com.example.boyner.model.TopHeadlinesModel.ArticleData
+import com.example.boyner.model.ourcesModel.SourcesSubListData
+import com.example.boyner.model.topHeadlinesModel.ArticleData
 import com.example.boyner.network.repository.Repository
 import kotlinx.coroutines.launch
 
@@ -37,7 +37,7 @@ class NewsViewModel(
             _sourcesList.value = response.body()?.sources?.toMutableList()
         } else {
             _loading.value = false
-            _errorMessage.value = "veriler alınamadı"
+            _errorMessage.value =  "veriler alınamadı"
 
         }
     }
@@ -50,8 +50,32 @@ class NewsViewModel(
             _topHeadlinesArticleList.value = response.body()?.articles
         } else {
             _loading.value = false
-            _errorMessage.value = "veriler alınamadı"
+            _errorMessage.value =   "veriler alınamadı"
         }
     }
+
+   /*
+
+   viewmodel de databse işlemleri.
+
+
+
+
+   fun saveArticle(article: ArticleData)= viewModelScope.launch {
+        article.isAdded = true
+        repository.upsert(article)
+    }
+
+
+    fun deleteSavedArticle(article: ArticleData)= viewModelScope.launch {
+        article.isAdded = false
+        repository.deleteArticle(article)
+    }
+
+    */
+
+
+
+
 
 }

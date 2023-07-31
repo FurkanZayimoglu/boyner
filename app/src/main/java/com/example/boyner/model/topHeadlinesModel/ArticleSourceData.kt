@@ -1,4 +1,4 @@
-package com.example.boyner.model.TopHeadlinesModel
+package com.example.boyner.model.topHeadlinesModel
 
 import com.google.gson.annotations.SerializedName
 

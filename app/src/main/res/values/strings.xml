@@ -5,6 +5,7 @@
     <string name="icon">icon</string>
     <string name="page_title">Kaynaklar</string>
     <string name="imageback">imageback</string>
-    <string name="okuma_listeme_ekle">Okuma Listeme Ekle</string>
+    <string name="add_read_list">Okuma Listeme Ekle</string>
+    <string name="remove_read_list">Okuma Listesinden Çıkar</string>
     <string name="image">image</string>
 </resources>

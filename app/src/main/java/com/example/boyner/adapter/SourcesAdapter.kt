@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.boyner.databinding.ItemSourceNewsLayoutBinding
-import com.example.boyner.model.SourcesModel.SourcesSubListData
+import com.example.boyner.model.ourcesModel.SourcesSubListData
 
 class SourcesAdapter : RecyclerView.Adapter<SourcesAdapter.SourceViewHolder>() {
 
